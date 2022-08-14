@@ -15,12 +15,12 @@ class Robie2xl:
             print(str(category["id"]) + " " + category["name"])
 
     def prepare_questions(self):
-        questions = {}
+        questions = []
         raw_questions = self.conn.get_questions(15)
-        i = 1
+        i = 0
         for raw_question in raw_questions:
             answers = []
-            questions[i] = {"question": raw_question["question"]}
+            questions.append({"question": raw_question["question"]})
             answers = [{raw_question["correct_answer"]: True}]
             for answer in raw_question["incorrect_answers"]:
                 answers.append({answer: False})
@@ -34,4 +34,7 @@ class Robie2xl:
 
 # print(list(Robie2xl().prepare_questions()[5]["answers"][3].keys())[0])
 questions = Robie2xl().prepare_questions()
-print(questions)
+for question in questions:
+    print(question["question"])
+    for answer in question["answers"]:
+        print(list(answer.keys())[0])
