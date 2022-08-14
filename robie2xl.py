@@ -1,4 +1,5 @@
 import opentdb
+from html import unescape
 
 
 class Robie2xl:
@@ -20,10 +21,10 @@ class Robie2xl:
         i = 0
         for raw_question in raw_questions:
             answers = []
-            questions.append({"question": raw_question["question"]})
-            answers = [{raw_question["correct_answer"]: True}]
+            questions.append({"question": unescape(raw_question["question"])})
+            answers = [{unescape(raw_question["correct_answer"]): True}]
             for answer in raw_question["incorrect_answers"]:
-                answers.append({answer: False})
+                answers.append({unescape(answer): False})
             questions[i]["answers"] = answers
             i = i + 1
         return questions
