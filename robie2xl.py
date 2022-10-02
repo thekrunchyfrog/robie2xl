@@ -1,4 +1,6 @@
 import opentdb
+import random
+
 from html import unescape
 
 
@@ -25,9 +27,18 @@ class Robie2xl:
             answers = [{unescape(raw_question["correct_answer"]): True}]
             for answer in raw_question["incorrect_answers"]:
                 answers.append({unescape(answer): False})
-            questions[i]["answers"] = answers
+            questions[i]["answers"] = self.prepare_answers(answers)
             i = i + 1
         return questions
+
+    def prepare_answers(self, answers):
+        prepped_answers = {}
+
+        for x in ("a", "b", "c", "d"):
+            item1 = random.choice(answers)
+            prepped_answers[x] = item1
+            answers.remove(item1)
+        return prepped_answers
 
     # if __name__ == "__main__":
     #    main()
@@ -35,7 +46,8 @@ class Robie2xl:
 
 # print(list(Robie2xl().prepare_questions()[5]["answers"][3].keys())[0])
 questions = Robie2xl().prepare_questions()
+
 for question in questions:
+    print(question)
     print(question["question"])
-    for answer in question["answers"]:
-        print(list(answer.keys())[0])
+    print(question["answers"]["a"])
