@@ -60,3 +60,6 @@ class GameSetup:
                 + " Your score is still: "
                 + str(self.score)
             )
+
+    def final_score(self):
+        print("Your final score is: " + str(self.score) + " out of 10.")
