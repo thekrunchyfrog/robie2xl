@@ -19,7 +19,7 @@ class Robie2xl:
 
     def prepare_questions(self):
         questions = []
-        raw_questions = self.conn.get_questions(15)
+        raw_questions = self.conn.get_questions(11)
         i = 0
         for raw_question in raw_questions:
             answers = []
@@ -33,12 +33,16 @@ class Robie2xl:
 
     def prepare_answers(self, answers):
         prepped_answers = {}
-
         for x in ("a", "b", "c", "d"):
             item1 = random.choice(answers)
             prepped_answers[x] = item1
             answers.remove(item1)
         return prepped_answers
+
+    def read_answers(answers):
+        for key in question["answers"]:
+            for key2 in question["answers"][key]:
+                print(key + ": " + key2)
 
     # if __name__ == "__main__":
     #    main()
@@ -47,7 +51,19 @@ class Robie2xl:
 # print(list(Robie2xl().prepare_questions()[5]["answers"][3].keys())[0])
 questions = Robie2xl().prepare_questions()
 
+score = 0
+
 for question in questions:
-    print(question)
     print(question["question"])
-    print(question["answers"]["a"])
+    Robie2xl.read_answers(question["answers"])
+    guess = input("What is your guess: ")
+    is_it = list(question["answers"][guess].values())[0]
+
+    print(question["answers"])
+    if is_it is True:
+        score += 1
+        print("Correct! Score is now: " + str(score))
+    else:
+        print("Wrong! Your score is still: " + str(score))
+
+print("Your final score is: " + str(score) + "out of 10.")
