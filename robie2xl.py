@@ -48,7 +48,6 @@ class Robie2xl:
     #    main()
 
 
-# print(list(Robie2xl().prepare_questions()[5]["answers"][3].keys())[0])
 questions = Robie2xl().prepare_questions()
 
 score = 0
@@ -56,14 +55,25 @@ score = 0
 for question in questions:
     print(question["question"])
     Robie2xl.read_answers(question["answers"])
+
     guess = input("What is your guess: ")
     is_it = list(question["answers"][guess].values())[0]
 
-    print(question["answers"])
+    for answer in ("a", "b", "c", "d"):
+        if list(question["answers"][answer].values())[0] is True:
+            correct_answer = answer
+
     if is_it is True:
         score += 1
         print("Correct! Score is now: " + str(score))
     else:
-        print("Wrong! Your score is still: " + str(score))
+        print(
+            "Wrong! Correct answer was: "
+            + correct_answer
+            + ": "
+            + list(question["answers"][correct_answer].keys())[0]
+            + " Your score is still: "
+            + str(score)
+        )
 
-print("Your final score is: " + str(score) + "out of 10.")
+print("Your final score is: " + str(score) + " out of 10.")
