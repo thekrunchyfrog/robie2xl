@@ -1,6 +1,7 @@
 import opentdb
 import random
 from html import unescape
+from read_me import *
 
 
 class GameSetup:
@@ -38,6 +39,7 @@ class GameSetup:
         for key in question["answers"]:
             for key2 in question["answers"][key]:
                 print(key + ": " + key2)
+                ReadMe().readme(key + ": " + key2)
 
     def get_correct_answer(self, question):
         for answer in ("a", "b", "c", "d"):
@@ -50,16 +52,16 @@ class GameSetup:
 
         if is_it is True:
             self.score += 1
-            print("Correct! Score is now: " + str(self.score))
+            return "Correct! Score is now: " + str(self.score)
         else:
-            print(
+            return (
                 "Wrong! Correct answer was: "
                 + correct_answer
                 + ": "
                 + list(question["answers"][correct_answer].keys())[0]
-                + " Your score is still: "
+                + ". Your score is still: "
                 + str(self.score)
             )
 
     def final_score(self):
-        print("Your final score is: " + str(self.score) + " out of 10.")
+        return "Your final score is: " + str(self.score) + " out of 10."

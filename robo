@@ -1,0 +1,3 @@
+espeak --stdout -v en-us+m5 -p 20 -s 170 | play -t wav - \
+overdrive 10 \
+gain 8
