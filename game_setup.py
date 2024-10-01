@@ -38,7 +38,6 @@ class GameSetup:
     def read_answers(self, question):
         for key in question["answers"]:
             for key2 in question["answers"][key]:
-                print(key + ": " + key2)
                 ReadMe().readme(key + ": " + key2)
 
     def get_correct_answer(self, question):
@@ -52,16 +51,17 @@ class GameSetup:
 
         if is_it is True:
             self.score += 1
-            return "Correct! Score is now: " + str(self.score)
+            return ["Correct!", "right"]
         else:
-            return (
-                "Wrong! Correct answer was: "
-                + correct_answer
-                + ": "
-                + list(question["answers"][correct_answer].keys())[0]
-                + ". Your score is still: "
-                + str(self.score)
-            )
+            return [
+                (
+                    "Wrong! Correct answer was: "
+                    + correct_answer
+                    + ": "
+                    + list(question["answers"][correct_answer].keys())[0]
+                ),
+                "wrong",
+            ]
 
     def final_score(self):
         return "Your final score is: " + str(self.score) + " out of 10."

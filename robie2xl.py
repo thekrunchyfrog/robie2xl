@@ -1,6 +1,8 @@
-import os
+from insults import insults
+from praise import praise
 from game_setup import *
 from read_me import *
+import random
 
 
 class Robie2xl:
@@ -15,12 +17,29 @@ game = GameSetup()
 readit = ReadMe()
 questions = game.get_questions()
 
-for question in questions:
-    print(question["question"])
-    readit.readme(question["question"])
-    game.read_answers(question)
+question_number = 0
+
+while question_number < len(questions):
+    readit.readme(questions[question_number]["question"])
+    game.read_answers(questions[question_number])
+    readit.readme("What is your guess?")
     guess = input("What is your guess: ")
-    x = game.check_answer(question, guess)
-    os.popen("echo {0} | ./robo".format(x)).read()
+
+    if guess not in ["a", "b", "c", "d"]:
+        readit.readme("does not compute")
+        continue
+    else:
+        x = game.check_answer(questions[question_number], guess)
+
+    readit.readme(x[0])
+
+    if x[1] == "right":
+        readit.readme(random.choice(praise))
+        readit.readme("your score is now " + str(game.score))
+    else:
+        readit.readme(random.choice(insults))
+        readit.readme("your score is still " + str(game.score))
+
+    question_number = question_number + 1
 
 readit(game.final_score())
