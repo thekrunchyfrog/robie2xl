@@ -5,10 +5,10 @@ from time import sleep
 
 
 class Guts:
-    _btnA = 12
-    _btnB = 13
-    _btnC = 14
-    _btnD = 15
+    #_btnA = 12
+    #_btnB = 13
+    #_btnC = 14
+    #_btnD = 15
 
     _rightEye = 37
     _leftEye = 38
@@ -16,16 +16,16 @@ class Guts:
     _domeRed = 8
     _domeGreen = 10
     _domeBlue = 12
-    _freq = 100
+    _freq = 50
 
     def __init__(self):
         gpio.setmode(gpio.BOARD)
         gpio.setwarnings(False)
 
-        gpio.setup(self._btnA, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        gpio.setup(self._btnB, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        gpio.setup(self._btnC, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        gpio.setup(self._btnD, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        #gpio.setup(self._btnA, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        #gpio.setup(self._btnB, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        #gpio.setup(self._btnC, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        #gpio.setup(self._btnD, gpio.IN, pull_up_down=gpio.PUD_DOWN)
 
         gpio.setup(self._rightEye, gpio.OUT)
         gpio.setup(self._leftEye, gpio.OUT)
@@ -34,9 +34,9 @@ class Guts:
         gpio.setup(self._domeGreen, gpio.OUT)
         gpio.setup(self._domeBlue, gpio.OUT)
 
-        self.domeRED = (self._domeRed, self._freq)
-        self.domeGREEN = (self._domeGreen, self._freq)
-        self.domeBLUE = (self._domeBlue, self._freq)
+        self.domeRED = gpio.PWM(self._domeRed, self._freq)
+        self.domeGREEN = gpio.PWM(self._domeGreen, self._freq)
+        self.domeBLUE = gpio.PWM(self._domeBlue, self._freq)
 
     def eyes_open(self):
         gpio.output(self._rightEye, gpio.HIGH)
@@ -49,7 +49,7 @@ class Guts:
     def blink_eyes(self):
         if gpio.input(self._rightEye) == gpio.HIGH:
             self.eyes_close()
-            sleep(1)
+            sleep(0.5)
             self.eyes_open()
 
     def wink(self):
@@ -59,7 +59,7 @@ class Guts:
             gpio.output(self._rightEye, gpio.LOW)
         else:
             gpio.output(self._leftEye, gpio.LOW)
-        sleep(0.5)
+        sleep(0.25)
         self.eyes_open()
 
     def domeOn(self):
@@ -73,9 +73,12 @@ class Guts:
         self.domeBLUE.stop()
 
     def domeSetColor(self, valRed, valGreen, valBlue):
-        self.domeRED.ChangeDutyCyle()
-        self.domeGREEN.ChangeDutyCyle()
-        self.domeGREEN.ChangeDutyCyle()
+        self.domeRED.ChangeDutyCycle(valRed)
+        self.domeGREEN.ChangeDutyCycle(valGreen)
+        self.domeBLUE.ChangeDutyCycle(valBlue)
+
+    def cleanup(self):
+        gpio.cleanup()
 
     def _colorToFreq(num):
         return int(ceil(1 + (float(num - 2) / float(255 - 1) * (100 - 1))))
