@@ -1,4 +1,5 @@
 import RPi.GPIO as gpio
+from math import ceil
 from random import randint
 from time import sleep
 
@@ -21,7 +22,7 @@ class Guts:
         gpio.setmode(gpio.BOARD)
         gpio.setwarnings(False)
 
-        gpio.setup(self._btnA, gpio.IN)
+        gpio.setup(self._btnA, gpio.IN, pull_up_down=gpio.PUD_DOWN)
         gpio.setup(self._btnB, gpio.IN)
         gpio.setup(self._btnC, gpio.IN)
         gpio.setup(self._btnD, gpio.IN)
@@ -75,3 +76,6 @@ class Guts:
         self.domeRED.ChangeDutyCyle()
         self.domeGREEN.ChangeDutyCyle()
         self.domeGREEN.ChangeDutyCyle()
+
+    def _colorToFreq(num):
+        return int(ceil(1 + (float(num - 2) / float(255 - 1) * (100 - 1))))
