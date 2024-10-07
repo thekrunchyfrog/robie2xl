@@ -10,12 +10,12 @@ class Guts:
     _btnC = 14
     _btnD = 15
 
-    _rightEye = 16
-    _leftEye = 17
+    _rightEye = 37
+    _leftEye = 38
 
-    _domeRed = 18
-    _domeGreen = 19
-    _domeBlue = 20
+    _domeRed = 8
+    _domeGreen = 10
+    _domeBlue = 12
     _freq = 100
 
     def __init__(self):
@@ -23,9 +23,9 @@ class Guts:
         gpio.setwarnings(False)
 
         gpio.setup(self._btnA, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        gpio.setup(self._btnB, gpio.IN)
-        gpio.setup(self._btnC, gpio.IN)
-        gpio.setup(self._btnD, gpio.IN)
+        gpio.setup(self._btnB, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        gpio.setup(self._btnC, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        gpio.setup(self._btnD, gpio.IN, pull_up_down=gpio.PUD_DOWN)
 
         gpio.setup(self._rightEye, gpio.OUT)
         gpio.setup(self._leftEye, gpio.OUT)
