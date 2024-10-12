@@ -73,12 +73,17 @@ class Guts:
         self.domeBLUE.stop()
 
     def domeSetColor(self, valRed, valGreen, valBlue):
-        self.domeRED.ChangeDutyCycle(valRed)
-        self.domeGREEN.ChangeDutyCycle(valGreen)
-        self.domeBLUE.ChangeDutyCycle(valBlue)
+        red = self._colorToFreq(valRed)
+        green = self._colorToFreq(valGreen)
+        blue = self._colorToFreq(valBlue)
+
+        self.domeRED.ChangeDutyCycle(red)
+        self.domeGREEN.ChangeDutyCycle(green)
+        self.domeBLUE.ChangeDutyCycle(blue)
 
     def cleanup(self):
         gpio.cleanup()
 
-    def _colorToFreq(num):
+    def _colorToFreq(self, num):
+        num = abs(num - 255)
         return int(ceil(1 + (float(num - 2) / float(255 - 1) * (100 - 1))))
