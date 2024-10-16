@@ -5,27 +5,35 @@ from time import sleep
 
 
 class Guts:
-    #_btnA = 12
-    #_btnB = 13
-    #_btnC = 14
-    #_btnD = 15
+    _btnA = 31
+    _btnB = 33
+    _btnC = 35
+    _btnD = 37
 
-    _rightEye = 37
+    _rightEye = 22
     _leftEye = 38
 
-    _domeRed = 8
-    _domeGreen = 10
-    _domeBlue = 12
+    _domeRed = 36
+    _domeGreen = 38
+    _domeBlue = 40
     _freq = 50
+    _button_pressed = None
 
     def __init__(self):
         gpio.setmode(gpio.BOARD)
         gpio.setwarnings(False)
 
-        #gpio.setup(self._btnA, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        #gpio.setup(self._btnB, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        #gpio.setup(self._btnC, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        #gpio.setup(self._btnD, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        gpio.setup(self._btnA, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        gpio.add_event_detect(self._btnA, gpio.RISING, callback = self.button_callback)
+
+        gpio.setup(self._btnB, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        gpio.add_event_detect(self._btnB, gpio.RISING, callback = self.button_callback)
+
+        gpio.setup(self._btnC, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        gpio.add_event_detect(self._btnC, gpio.RISING, callback = self.button_callback)
+
+        gpio.setup(self._btnD, gpio.IN, pull_up_down=gpio.PUD_DOWN)
+        gpio.add_event_detect(self._btnD, gpio.RISING, callback = self.button_callback)
 
         gpio.setup(self._rightEye, gpio.OUT)
         gpio.setup(self._leftEye, gpio.OUT)
@@ -37,6 +45,8 @@ class Guts:
         self.domeRED = gpio.PWM(self._domeRed, self._freq)
         self.domeGREEN = gpio.PWM(self._domeGreen, self._freq)
         self.domeBLUE = gpio.PWM(self._domeBlue, self._freq)
+
+        self.button_pressed = 0
 
     def eyes_open(self):
         gpio.output(self._rightEye, gpio.HIGH)
@@ -87,3 +97,17 @@ class Guts:
     def _colorToFreq(self, num):
         num = abs(num - 255)
         return int(ceil(1 + (float(num - 2) / float(255 - 1) * (100 - 1))))
+
+    def button_callback(self, channel):
+        match channel:
+            case 31:
+                self.button_pressed = "a"
+            case 33:
+                self.button_pressed = "b"
+            case 35:
+                self.button_pressed = "c"
+            case 37:
+                self.button_pressed = "d"
+
+    def getButtonPressed(self):
+        return self.button_pressed
