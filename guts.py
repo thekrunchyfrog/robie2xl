@@ -24,16 +24,16 @@ class Guts:
         gpio.setwarnings(False)
 
         gpio.setup(self._btnA, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        gpio.add_event_detect(self._btnA, gpio.RISING, callback = self.button_callback)
+        gpio.add_event_detect(self._btnA, gpio.RISING, callback = self.button_callback, bouncetime=200)
 
         gpio.setup(self._btnB, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        gpio.add_event_detect(self._btnB, gpio.RISING, callback = self.button_callback)
+        gpio.add_event_detect(self._btnB, gpio.RISING, callback = self.button_callback, bouncetime=200)
 
         gpio.setup(self._btnC, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        gpio.add_event_detect(self._btnC, gpio.RISING, callback = self.button_callback)
+        gpio.add_event_detect(self._btnC, gpio.RISING, callback = self.button_callback, bouncetime=200)
 
         gpio.setup(self._btnD, gpio.IN, pull_up_down=gpio.PUD_DOWN)
-        gpio.add_event_detect(self._btnD, gpio.RISING, callback = self.button_callback)
+        gpio.add_event_detect(self._btnD, gpio.RISING, callback = self.button_callback, bouncetime=200)
 
         gpio.setup(self._rightEye, gpio.OUT)
         gpio.setup(self._leftEye, gpio.OUT)
@@ -46,7 +46,7 @@ class Guts:
         self.domeGREEN = gpio.PWM(self._domeGreen, self._freq)
         self.domeBLUE = gpio.PWM(self._domeBlue, self._freq)
 
-        self.button_pressed = 0
+        self.button_pressed = self._button_pressed
 
     def eyes_open(self):
         gpio.output(self._rightEye, gpio.HIGH)
@@ -100,14 +100,16 @@ class Guts:
 
     def button_callback(self, channel):
         match channel:
-            case 31:
+            case self._btnA:
                 self.button_pressed = "a"
-            case 33:
+            case self._btnB:
                 self.button_pressed = "b"
-            case 35:
+            case self._btnC:
                 self.button_pressed = "c"
-            case 37:
+            case self._btnD:
                 self.button_pressed = "d"
 
     def getButtonPressed(self):
-        return self.button_pressed
+        throw_away = self.button_pressed
+        self.button_pressed = None
+        return throw_away
