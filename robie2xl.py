@@ -1,5 +1,6 @@
 from insults import insults
 from praise import praise
+from guts import Guts
 from game_setup import *
 from read_me import *
 import random
@@ -16,6 +17,7 @@ class Robie2xl:
 game = GameSetup()
 readit = ReadMe()
 questions = game.get_questions()
+robot = Guts()
 
 question_number = 0
 
@@ -23,13 +25,12 @@ while question_number < len(questions):
     readit.readme(questions[question_number]["question"])
     game.read_answers(questions[question_number])
     readit.readme("What is your guess?")
-    guess = input("What is your guess: ")
+    guess = None
 
-    if guess not in ["a", "b", "c", "d"]:
-        readit.readme("does not compute")
-        continue
-    else:
-        x = game.check_answer(questions[question_number], guess)
+    while guess not in ["a", "b", "c", "d"]:
+        guess = robot.getButtonPressed()
+        
+    x = game.check_answer(questions[question_number], guess)
 
     readit.readme(x[0])
 
@@ -41,5 +42,6 @@ while question_number < len(questions):
         readit.readme("your score is still " + str(game.score))
 
     question_number = question_number + 1
+    guess = None
 
-readit(game.final_score())
+readit.readme(game.final_score())
